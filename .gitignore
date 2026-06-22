@@ -1,0 +1,15 @@
+# Simulation
+*.vcd
+*.fst
+*.log
+
+# Verilator
+obj_dir/
+
+# Python
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
