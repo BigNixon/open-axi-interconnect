@@ -5,6 +5,11 @@
 
 # Verilator
 obj_dir/
+sim/sim_build/
+
+# Waveforms
+*.vcd
+*.fst
 
 # Python
 __pycache__/
