@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1785290326" />
+    <testcase name="test_axi_lite_basic" classname="test_axi_lite" file="/mnt/c/Users/Nixon/Desktop/Proyectos/AXI_Subsystem/open-axi-interconnect/verification/cocotb/test_axi_lite.py" lineno="47" time="0.011110782623291016" sim_time_ns="120.0" ratio_time="10800.319299600875" />
+  </testsuite>
+</testsuites>
