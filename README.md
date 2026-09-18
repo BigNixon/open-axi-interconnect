@@ -6,7 +6,7 @@ A synthesizable, open-source AXI4/AXI4-Lite crossbar interconnect written in Sys
 
 Full project documentation is published at:
 
-**https://open-axi-interconnect.github.io/open-axi-interconnect**
+**https://BigNixon.github.io/open-axi-interconnect/**
 
 > Replace the URL above with your actual GitHub Pages URL after enabling Pages.
 
