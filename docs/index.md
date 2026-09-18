@@ -4,45 +4,45 @@ Welcome to the **Open AXI Interconnect** documentation — a fully synthesizable
 
 <div class="grid cards" markdown>
 
--   :material-rocket-launch-outline:{ .lg .middle } __Getting Started__
+* :material-rocket-launch-outline:{ .lg .middle } **Getting Started**
 
-    ---
+  ---
 
-    New to the project? Start here to get up and running in minutes.
+  New to the project? Start here to get up and running in minutes.
 
-    [:octicons-arrow-right-24: Quick Start](getting-started/quickstart.md)
+  [:octicons-arrow-right-24: Quick Start](getting-started/quickstart.md)
 
--   :material-sitemap:{ .lg .middle } __Architecture__
+* :material-sitemap:{ .lg .middle } **Architecture**
 
-    ---
+  ---
 
-    Understand the system architecture, memory maps, and protocol details.
+  Understand the system architecture, memory maps, and protocol details.
 
-    [:octicons-arrow-right-24: Architecture Overview](architecture/index.md)
+  [:octicons-arrow-right-24: Architecture Overview](architecture/index.md)
 
--   :material-code-braces:{ .lg .middle } __RTL Reference__
+* :material-code-braces:{ .lg .middle } **RTL Reference**
 
-    ---
+  ---
 
-    Explore the RTL modules, interfaces, and integration guides.
+  Explore the RTL modules, interfaces, and integration guides.
 
-    [:octicons-arrow-right-24: RTL Modules](rtl/index.md)
+  [:octicons-arrow-right-24: RTL Modules](rtl/index.md)
 
--   :material-test-tube:{ .lg .middle } __Verification__
+* :material-test-tube:{ .lg .middle } **Verification**
 
-    ---
+  ---
 
-    Review test plans, coverage reports, and simulation results.
+  Review test plans, coverage reports, and simulation results.
 
-    [:octicons-arrow-right-24: Test Plan](verification/index.md)
+  [:octicons-arrow-right-24: Test Plan](verification/index.md)
 
--   :material-source-branch:{ .lg .middle } __Development__
+* :material-source-branch:{ .lg .middle } **Development**
 
-    ---
+  ---
 
-    Contributing guidelines, CI/CD setup, and release notes.
+  Contributing guidelines, CI/CD setup, and release notes.
 
-    [:octicons-arrow-right-24: Contributing](development/index.md)
+  [:octicons-arrow-right-24: Contributing](development/index.md)
 
 </div>
 
@@ -50,21 +50,21 @@ Welcome to the **Open AXI Interconnect** documentation — a fully synthesizable
 
 ## Features
 
-- **AXI4/AXI4-Lite Support**: Full crossbar interconnect with configurable master/slave counts
-- **Parameterizable**: Data width, address width, and ID width are all configurable
-- **Synthesizable**: Clean SystemVerilog RTL targeting both FPGA and ASIC flows
-- **Well-Verified**: Comprehensive cocotb testbench with functional coverage
-- **Open Source**: MIT licensed — free for commercial and academic use
+* **AXI4/AXI4-Lite Support**: Full crossbar interconnect with configurable master/slave counts
+* **Parameterizable**: Data width, address width, and ID width are configurable
+* **Synthesizable**: Clean SystemVerilog RTL targeting both FPGA and ASIC flows
+* **Well-Verified**: Comprehensive cocotb testbench with functional coverage
+* **Open Source**: MIT licensed — free for commercial and academic use
 
 ## Quick Stats
 
-| Metric | Value |
-|--------|-------|
-| Language | SystemVerilog |
-| Masters | Configurable (default: 2) |
-| Slaves | Configurable (default: 4) |
+| Metric     | Value                          |
+| ---------- | ------------------------------ |
+| Language   | SystemVerilog                  |
+| Masters    | Configurable (default: 2)      |
+| Slaves     | Configurable (default: 4)      |
 | Data Width | Configurable (default: 32-bit) |
-| License | MIT |
+| License    | MIT                            |
 
 ## Repository
 
