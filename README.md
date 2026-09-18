@@ -8,8 +8,6 @@ Full project documentation is published at:
 
 **https://BigNixon.github.io/open-axi-interconnect/**
 
-> Replace the URL above with your actual GitHub Pages URL after enabling Pages.
-
 To build and preview the documentation locally:
 
 ```bash

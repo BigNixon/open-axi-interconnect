@@ -42,15 +42,7 @@ Welcome to the **Open AXI Interconnect** documentation — a fully synthesizable
 
     Contributing guidelines, CI/CD setup, and release notes.
 
-    [:octicons-arrow-right-24: Contributing](development/contributing.md)
-
--   :material-api:{ .lg .middle } __API Reference__
-
-    ---
-
-    Detailed API documentation for memory maps and registers.
-
-    [:octicons-arrow-right-24: API Docs](api/index.md)
+    [:octicons-arrow-right-24: Contributing](development/index.md)
 
 </div>
 
