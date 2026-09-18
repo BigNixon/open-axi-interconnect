@@ -4,40 +4,33 @@
 
 This document defines the memory map of the AXI4-Lite subsystem.
 
-The subsystem implements a memory-mapped architecture where each peripheral
-is assigned a unique address range.
-
-The AXI master accesses peripherals using read and write transactions.
+The subsystem implements a memory-mapped architecture where each peripheral is assigned a unique address range. The AXI master accesses peripherals using read and write transactions.
 
 Architecture:
+
+```
              AXI Master
                  |
                  |
           AXI4-Lite Interconnect
                  |
-   +-------------+-------------+
-   |             |             |
-  RAM           UART          Timer
+   +-------------+-------------+-------------+
+   |             |             |             |
+  RAM          UART          Timer         GPIO
+```
 
-
----
-
-# 2. Address Space
+## 2. Address Space
 
 The AXI subsystem uses a 32-bit address space.
 
-Address allocation:
-
 | Peripheral | Base Address | End Address | Size |
-|------------|-------------|-------------|------|
-| RAM        | 0x0000_0000 | 0x0000_FFFF | 64 KB |
-| UART       | 0x4000_0000 | 0x4000_0FFF | 4 KB |
-| TIMER      | 0x4001_0000 | 0x4001_0FFF | 4 KB |
-| GPIO       | 0x4002_0000 | 0x4002_0FFF | 4 KB |
+|------------|--------------|-------------|------|
+| RAM        | `0x0000_0000` | `0x0000_FFFF` | 64 KB |
+| UART       | `0x4000_0000` | `0x4000_0FFF` | 4 KB |
+| Timer      | `0x4001_0000` | `0x4001_0FFF` | 4 KB |
+| GPIO       | `0x4002_0000` | `0x4002_0FFF` | 4 KB |
 
----
-
-# 3. AXI Address Decoding
+## 3. AXI Address Decoding
 
 The interconnect is responsible for:
 
@@ -47,17 +40,16 @@ The interconnect is responsible for:
 4. Returning the response to the master.
 
 Example:
+
 ```
 Address = 0x40000010
 0x40000000 - 0x40000FFF
-    |
-    v
-   UART
+        |
+        v
+      UART
 ```
 
----
-
-# 4. Supported Transactions
+## 4. Supported Transactions
 
 Version 1:
 
@@ -66,6 +58,7 @@ Supported:
 - Single beat reads
 - Single beat writes
 - 32-bit data width
+- Write strobes (`WSTRB`)
 
 Not supported:
 
@@ -74,30 +67,31 @@ Not supported:
 - AXI IDs
 - Cache attributes
 
+## 5. Transaction Examples
 
----
+### Write UART Data
 
-# 5. Transaction Examples
-
-## Write UART Data
 Master writes:
-```
-Address:
-0x40000000
 
-Data:
-0x00000041
-
-Operation:
-Transmit character 'A'
 ```
----
-## Read Timer Counter
+Address: 0x40000008
+Data:    0x00000041
+Operation: Transmit character 'A'
+```
+
+### Read Timer Counter
+
 ```
 Master reads:
-Address:
-0x40010008
+Address: 0x40010008
+Response: Current timer value
+```
 
-Response:
-Current timer value
+### Write GPIO Output
+
+```
+Master writes:
+Address: 0x40020004
+Data:    0xA5A5A5A5
+Operation: Drive GPIO output value
 ```

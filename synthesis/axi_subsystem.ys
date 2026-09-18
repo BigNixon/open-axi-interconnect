@@ -1,0 +1,26 @@
+# Yosys synthesis script for axi_subsystem
+# Run: yosys -s axi_subsystem.ys
+
+read_verilog -sv ../rtl/axi/axi_lite_slave.sv
+read_verilog -sv ../rtl/axi/axi_lite_interconnect.sv
+read_verilog -sv ../rtl/peripherals/ram.sv
+read_verilog -sv ../rtl/peripherals/uart.sv
+read_verilog -sv ../rtl/peripherals/timer.sv
+read_verilog -sv ../rtl/peripherals/gpio.sv
+read_verilog -sv ../rtl/top/axi_subsystem.sv
+
+hierarchy -top axi_subsystem
+
+# Basic synthesis flow
+proc
+opt
+flatten
+opt
+
+techmap
+opt
+
+# Write synthesized netlist (generic cells)
+write_verilog axi_subsystem_synth.v
+
+stat

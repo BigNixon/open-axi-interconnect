@@ -1,41 +1,91 @@
-# Open AXI4 RTL Subsystem
-Open-source AXI4 subsystem implementation featuring SystemVerilog RTL, assertions, cocotb tests, and Verilator simulation.
-A synthesizable AMBA AXI4 subsystem implemented in SystemVerilog.
+# Open AXI Interconnect
+
+A synthesizable, open-source AXI4/AXI4-Lite crossbar interconnect written in SystemVerilog, with comprehensive cocotb/Verilator testbenches.
+
+## Documentation
+
+Full project documentation is published at:
+
+**https://open-axi-interconnect.github.io/open-axi-interconnect**
+
+> Replace the URL above with your actual GitHub Pages URL after enabling Pages.
+
+To build and preview the documentation locally:
+
+```bash
+pip install -r requirements.txt
+mkdocs serve
+```
+
+To build the documentation site once:
+
+```bash
+mkdocs build
+```
+
+## Overview
+
+This project implements a parameterizable AXI4/AXI4-Lite crossbar interconnect for use in FPGA and ASIC designs. It supports multiple masters and slaves, address decoding, arbitration, and configurable data width.
+
+## Repository Structure
+
+```
+.
+├── docs/                   # Project documentation (MkDocs source)
+├── rtl/                    # SystemVerilog RTL source files
+├── sim/                    # Simulation scripts and cocotb testbenches
+├── tests/                  # Additional test cases
+├── mkdocs.yml              # MkDocs configuration
+├── requirements.txt        # Python dependencies
+└── README.md               # This file
+```
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.8+
+- Verilator
+- Cocotb
+- Make
+
+### Install Python Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run Simulation
+
+```bash
+cd sim
+make
+```
+
+### Run Lint
+
+```bash
+cd sim
+make lint
+```
 
 ## Features
 
-- AXI4-Lite slave interface
-- AXI4 interconnect
+- AXI4/AXI4-Lite protocol support
+- Configurable number of masters and slaves
 - Round-robin arbitration
-- GPIO/UART/Timer peripherals
-- Cocotb verification
-- SystemVerilog Assertions
+- Address-based slave selection
+- Parameterizable data/address widths
+- cocotb/Verilator testbenches
 
-## Tools
+## Contributing
 
-- Verilator
-- Cocotb
-- GTKWave
-- Yosys
+1. Fork the repository.
+2. Create a feature branch.
+3. Add or update tests for RTL changes.
+4. Update documentation under `docs/`.
+5. Submit a pull request.
 
-## Architecture
+## License
 
-```
-		AXI Master
-		    |
-		    |
-		    |
-		AXI Interconnect
-			|
-|-----------|------------|           
-|RAM       UART        Timer
-```
-
-## Verification
-
-Tests:
-- read/write transactions
-- invalid addresses
-- burst transfers
-- arbitration fairness
-- protocol compliance
+See `LICENSE` for details.

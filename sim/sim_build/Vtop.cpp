@@ -11,7 +11,6 @@ Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , vlSymsp{new Vtop__Syms(contextp(), _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
     , rst_n{vlSymsp->TOP.rst_n}
-    , awaddr{vlSymsp->TOP.awaddr}
     , awvalid{vlSymsp->TOP.awvalid}
     , awready{vlSymsp->TOP.awready}
     , wstrb{vlSymsp->TOP.wstrb}
@@ -20,14 +19,19 @@ Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , bresp{vlSymsp->TOP.bresp}
     , bvalid{vlSymsp->TOP.bvalid}
     , bready{vlSymsp->TOP.bready}
-    , araddr{vlSymsp->TOP.araddr}
     , arvalid{vlSymsp->TOP.arvalid}
     , arready{vlSymsp->TOP.arready}
     , rresp{vlSymsp->TOP.rresp}
     , rvalid{vlSymsp->TOP.rvalid}
     , rready{vlSymsp->TOP.rready}
+    , uart_tx{vlSymsp->TOP.uart_tx}
+    , uart_rx{vlSymsp->TOP.uart_rx}
+    , timer_irq{vlSymsp->TOP.timer_irq}
+    , awaddr{vlSymsp->TOP.awaddr}
     , wdata{vlSymsp->TOP.wdata}
+    , araddr{vlSymsp->TOP.araddr}
     , rdata{vlSymsp->TOP.rdata}
+    , gpio_pins{vlSymsp->TOP.gpio_pins}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

@@ -40,7 +40,7 @@ VM_USER_CFLAGS = \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
-  -Wl,-rpath,/mnt/c/Users/Nixon/Desktop/Proyectos/AXI_Subsystem/open-axi-interconnect/.venv/lib/python3.10/site-packages/cocotb/libs -L/mnt/c/Users/Nixon/Desktop/Proyectos/AXI_Subsystem/open-axi-interconnect/.venv/lib/python3.10/site-packages/cocotb/libs -lcocotbvpi_verilator \
+  -Wl,-rpath,/home/bignixon/.local/lib/python3.10/site-packages/cocotb/libs -L/home/bignixon/.local/lib/python3.10/site-packages/cocotb/libs -lcocotbvpi_verilator \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
@@ -49,7 +49,7 @@ VM_USER_CLASSES = \
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
   .. \
-  ../../.venv/lib/python3.10/site-packages/cocotb/share/lib/verilator \
+  ../../../../.local/lib/python3.10/site-packages/cocotb/share/lib/verilator \
 
 ### Default rules...
 # Include list of all generated classes
@@ -60,7 +60,7 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
-verilator.o: /mnt/c/Users/Nixon/Desktop/Proyectos/AXI_Subsystem/open-axi-interconnect/.venv/lib/python3.10/site-packages/cocotb/share/lib/verilator/verilator.cpp 
+verilator.o: /home/bignixon/.local/lib/python3.10/site-packages/cocotb/share/lib/verilator/verilator.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 
 ### Link rules... (from --exe)

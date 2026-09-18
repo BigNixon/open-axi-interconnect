@@ -1,0 +1,89 @@
+site_name: Open AXI Interconnect
+site_description: Synthesizable AXI4/AXI4-Lite crossbar interconnect documentation
+site_author: Open AXI Interconnect Contributors
+site_url: https://open-axi-interconnect.github.io/open-axi-interconnect
+repo_name: open-axi-interconnect
+repo_url: https://github.com/open-axi-interconnect/open-axi-interconnect
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.action.edit
+    - content.action.view
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/open-axi-interconnect/open-axi-interconnect
+  version:
+    provider: mike
+
+nav:
+  - Home: index.md
+  - Architecture:
+      - architecture/index.md
+      - architecture.md
+      - fsm_diagram.md
+      - memory_map.md
+      - register_map.md
+  - RTL Reference:
+      - rtl/index.md
+  - Verification:
+      - verification/index.md
+  - Development:
+      - development/index.md
