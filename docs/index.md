@@ -1,66 +1,86 @@
 # Open AXI Interconnect
 
-A compact, configurable AXI4-Lite interconnect fabric for embedded SoCs.
+Welcome to the **Open AXI Interconnect** documentation — a fully synthesizable, parameterizable AXI4/AXI4-Lite crossbar interconnect for FPGA and ASIC designs.
 
-## Overview
+<div class="grid cards" markdown>
 
-This repository contains a synthesizable SystemVerilog implementation of an AXI4-Lite based subsystem with an integrated crossbar interconnect, address-decoded slave peripherals, and a Cocotb/Verilator simulation testbench.
+-   :material-rocket-launch-outline:{ .lg .middle } __Getting Started__
+
+    ---
+
+    New to the project? Start here to get up and running in minutes.
+
+    [:octicons-arrow-right-24: Quick Start](getting-started/quickstart.md)
+
+-   :material-sitemap:{ .lg .middle } __Architecture__
+
+    ---
+
+    Understand the system architecture, memory maps, and protocol details.
+
+    [:octicons-arrow-right-24: Architecture Overview](architecture/index.md)
+
+-   :material-code-braces:{ .lg .middle } __RTL Reference__
+
+    ---
+
+    Explore the RTL modules, interfaces, and integration guides.
+
+    [:octicons-arrow-right-24: RTL Modules](rtl/index.md)
+
+-   :material-test-tube:{ .lg .middle } __Verification__
+
+    ---
+
+    Review test plans, coverage reports, and simulation results.
+
+    [:octicons-arrow-right-24: Test Plan](verification/index.md)
+
+-   :material-source-branch:{ .lg .middle } __Development__
+
+    ---
+
+    Contributing guidelines, CI/CD setup, and release notes.
+
+    [:octicons-arrow-right-24: Contributing](development/contributing.md)
+
+-   :material-api:{ .lg .middle } __API Reference__
+
+    ---
+
+    Detailed API documentation for memory maps and registers.
+
+    [:octicons-arrow-right-24: API Docs](api/index.md)
+
+</div>
+
+---
 
 ## Features
 
-- AXI4-Lite compliant master/slave interfaces
-- Configurable crossbar interconnect supporting multiple masters and slaves
-- Integrated peripherals: RAM, UART, Timer, GPIO
-- Parameterized address map and data width
-- Cocotb + Verilator simulation environment
-- Continuous integration ready
+- **AXI4/AXI4-Lite Support**: Full crossbar interconnect with configurable master/slave counts
+- **Parameterizable**: Data width, address width, and ID width are all configurable
+- **Synthesizable**: Clean SystemVerilog RTL targeting both FPGA and ASIC flows
+- **Well-Verified**: Comprehensive cocotb testbench with functional coverage
+- **Open Source**: MIT licensed — free for commercial and academic use
 
-## Repository Structure
+## Quick Stats
 
-```
-open-axi-interconnect/
-├── rtl/
-│   ├── axi/              # AXI interfaces and interconnect
-│   ├── peripherals/      # SoC peripherals
-│   └── top/              # Top-level subsystem
-├── verification/
-│   ├── cocotb/           # Python testbench modules
-│   └── assertions/       # SystemVerilog assertions
-├── sim/                  # Simulation Makefile and scripts
-├── docs/                 # Documentation website source
-└── README.md
-```
+| Metric | Value |
+|--------|-------|
+| Language | SystemVerilog |
+| Masters | Configurable (default: 2) |
+| Slaves | Configurable (default: 4) |
+| Data Width | Configurable (default: 32-bit) |
+| License | MIT |
 
-## Quick Start
-
-### Run Simulation
+## Repository
 
 ```bash
-cd sim
-make
+git clone https://github.com/open-axi-interconnect/open-axi-interconnect.git
+cd open-axi-interconnect
 ```
-
-### Run Lint
-
-```bash
-cd sim
-make lint
-```
-
-### Serve Documentation Locally
-
-```bash
-mkdocs serve
-```
-
-Open `http://127.0.0.1:8000` in a browser.
-
-## Documentation
-
-Full documentation is available at: **https://bignixon.github.io/open-axi-interconnect**
-
-> Replace the URL above with the actual GitHub Pages URL once deployed.
 
 ## License
 
-MIT License - see [LICENSE](../LICENSE) for details.
+This project is licensed under the [MIT License](https://github.com/open-axi-interconnect/open-axi-interconnect/blob/main/LICENSE).

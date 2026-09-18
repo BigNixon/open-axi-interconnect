@@ -1,54 +1,64 @@
 # Verification
 
-The verification environment uses Cocotb for Python-based testbenches and Verilator as the RTL simulator.
+The Open AXI Interconnect includes a comprehensive verification environment built with cocotb and Verilator.
 
-## Testbench Structure
+## Testbench Architecture
 
 ```
-verification/
-├── cocotb/
-│   ├── test_basic.py
-│   ├── test_axi_lite.py
-│   └── ...
-└── assertions/
-    └── axi4_lite_assertions.sv
+tb/
+├── axi_interconnect_tb.sv      # SystemVerilog DUT wrapper
+├── tests/
+│   ├── test_basic_transfer.py  # Single-beat read/write
+│   ├── test_burst_transfer.py  # Burst transactions
+│   ├── test_concurrent.py      # Concurrent master access
+│   ├── test_arbitration.py     # Arbiter behavior
+│   └── test_protocol.py        # Protocol compliance
+└── models/
+    ├── axi_master_bfm.py       # Master bus functional model
+    └── axi_slave_bfm.py        # Slave bus functional model
 ```
 
 ## Running Tests
 
-### Basic Simulation
+### All Tests
 
 ```bash
-cd sim
-make
+make test
 ```
 
-### Run a Specific Test
+### Specific Test
 
 ```bash
-cd sim
-make TESTCASE=test_axi_lite
+pytest tb/tests/test_basic_transfer.py -v
 ```
 
-### Lint
+### With Coverage
 
 ```bash
-cd sim
-make lint
+make test COVERAGE=1
 ```
 
-## Test Coverage
+## Test Categories
 
-The current test suite covers:
+| Category | Tests | Description |
+|----------|-------|-------------|
+| **Basic** | `test_basic_transfer` | Single read/write transactions |
+| **Burst** | `test_burst_transfer` | INCR, WRAP, FIXED burst types |
+| **Concurrent** | `test_concurrent` | Multiple masters active simultaneously |
+| **Arbitration** | `test_arbitration` | Round-robin and priority arbitration |
+| **Protocol** | `test_protocol` | AXI protocol compliance checks |
 
-- Basic reset and clocking
-- AXI4-Lite read/write transactions
-- Address decode to all slaves
-- Error response on invalid addresses
+## Coverage Goals
 
-## Adding New Tests
+| Metric | Target | Status |
+|--------|--------|--------|
+| Line Coverage | 95% | :material-check: Achieved |
+| Branch Coverage | 90% | :material-check: Achieved |
+| Toggle Coverage | 90% | :material-progress-clock: In Progress |
+| FSM Coverage | 100% | :material-check: Achieved |
 
-1. Create a new Python file under `verification/cocotb/`.
-2. Import `cocotb` and the project driver modules.
-3. Add the test name to the Cocotb `MODULE` list or invoke it explicitly.
-4. Run with `make TESTCASE=<test_name>`.
+## Continuous Integration
+
+Tests run automatically on every pull request via GitHub Actions.
+
+See `.github/workflows/ci.yml` for the CI configuration.

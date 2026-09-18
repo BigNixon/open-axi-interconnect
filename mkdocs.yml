@@ -2,6 +2,8 @@ site_name: Open AXI Interconnect
 site_description: Synthesizable AXI4/AXI4-Lite crossbar interconnect documentation
 site_author: Open AXI Interconnect Contributors
 site_url: https://open-axi-interconnect.github.io/open-axi-interconnect
+copyright: Copyright &copy; 2024 Open AXI Interconnect Contributors — Licensed under MIT
+
 repo_name: open-axi-interconnect
 repo_url: https://github.com/open-axi-interconnect/open-axi-interconnect
 edit_uri: edit/main/docs/
@@ -12,6 +14,8 @@ site_dir: site
 theme:
   name: material
   language: en
+  logo: assets/images/logo.svg
+  favicon: assets/images/favicon.png
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -35,6 +39,8 @@ theme:
     - navigation.sections
     - navigation.expand
     - navigation.top
+    - navigation.footer
+    - navigation.indexes
     - search.suggest
     - search.highlight
     - search.share
@@ -42,16 +48,23 @@ theme:
     - content.code.annotate
     - content.action.edit
     - content.action.view
+    - content.tooltips
+    - content.tabs.link
 
 plugins:
-  - search
+  - search:
+      lang: en
   - minify:
       minify_html: true
 
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -62,9 +75,13 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - toc:
       permalink: true
-      toc_depth: 3
+      toc_depth: 4
 
 extra:
   social:
@@ -72,18 +89,42 @@ extra:
       link: https://github.com/open-axi-interconnect/open-axi-interconnect
   version:
     provider: mike
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX
+  generator: false
 
 nav:
   - Home: index.md
+  - Getting Started:
+      - getting-started/index.md
+      - getting-started/quickstart.md
+      - getting-started/installation.md
+      - getting-started/simulation.md
   - Architecture:
       - architecture/index.md
-      - architecture.md
-      - fsm_diagram.md
-      - memory_map.md
-      - register_map.md
+      - architecture/overview.md
+      - architecture/memory-map.md
+      - architecture/register-map.md
+      - architecture/fsm-diagrams.md
+      - architecture/axi-protocol.md
   - RTL Reference:
       - rtl/index.md
+      - rtl/top-level.md
+      - rtl/interconnect.md
+      - rtl/peripherals.md
   - Verification:
       - verification/index.md
+      - verification/test-plan.md
+      - verification/cocotb-tests.md
+      - verification/assertions.md
+      - verification/coverage.md
   - Development:
       - development/index.md
+      - development/contributing.md
+      - development/ci-cd.md
+      - development/changelog.md
+  - API Reference:
+      - api/index.md
+      - api/memory-map-api.md
+      - api/register-api.md

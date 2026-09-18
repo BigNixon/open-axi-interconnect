@@ -1,35 +1,73 @@
-# Architecture
+# Architecture Overview
 
-The Open AXI Interconnect subsystem is built around an AXI4-Lite crossbar that routes transactions from one or more masters to a configurable set of slaves.
+The **Open AXI Interconnect** is a lightweight, synthesizable AMBA AXI4-Lite based system-on-chip building block. It is intended for FPGA and ASIC designs that need a simple memory-mapped interconnect with a small set of peripherals.
 
-## Top-Level Block Diagram
+## System Block Diagram
 
 ```
-                    +------------------+
-    Master(s) ----->|  AXI Crossbar    |-----> Slave 0 (RAM)
-                    |                  |-----> Slave 1 (UART)
-                    |                  |-----> Slave 2 (Timer)
-                    |                  |-----> Slave 3 (GPIO)
-                    +------------------+
+                    ┌──────────────────────┐
+                    │    AXI4-Lite Master  │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │  AXI4-Lite           │
+                    │  Interconnect        │
+                    │  (Address Decoder)   │
+                    └──────┬───┬───┬───┬───┘
+                           │   │   │   │
+              ┌────────────┘   │   │   └────────────┐
+              │                │   │                │
+              ▼                ▼   ▼                ▼
+        ┌─────────┐      ┌─────────┐      ┌─────────┐      ┌─────────┐
+        │   RAM   │      │  UART   │      │  Timer  │      │  GPIO   │
+        │ (4 KB)  │      │         │      │         │      │(32 pins)│
+        └─────────┘      └────┬────┘      └────┬────┘      └────┬────┘
+                              │                │                │
+                              ▼                ▼                ▼
+                           uart_tx          timer_irq        gpio_pins
+                           uart_rx
 ```
 
-## Components
+## Key Components
 
-- **AXI Master/Slave Interfaces** – standard AXI4-Lite signal bundles
-- **AXI Crossbar** – address decode, arbitration, and routing
-- **Peripherals** – RAM, UART, Timer, GPIO
+| Component | Description |
+|-----------|-------------|
+| **AXI4-Lite Interconnect** | Single-master, multi-slave address decoder and router |
+| **RAM** | 4 KB memory array with control/status registers |
+| **UART** | Minimal UART with TX/RX data registers |
+| **Timer** | Free-running 32-bit counter with compare interrupt |
+| **GPIO** | 32 bidirectional pins with direction control |
 
-## Address Map
+## Design Characteristics
 
-| Slave | Base Address | Size | Description |
-|-------|-------------|------|-------------|
-| RAM   | `0x0000_0000` | 4 KB | General purpose memory |
-| UART  | `0x4000_0000` | 4 KB | UART controller |
-| Timer | `0x4000_1000` | 4 KB | System timer |
-| GPIO  | `0x4000_2000` | 4 KB | General purpose I/O |
+- **Single master only** — one AXI4-Lite master interface
+- **No pipelining** — no outstanding transactions
+- **No burst support** — AXI4-Lite only (single-beat)
+- **Fixed address map** — peripherals at hardcoded base addresses
+- **Configurable parameters** — data width, address width
 
-> Verify exact base addresses against `rtl/top/open_axi_interconnect_top.sv`.
+## Address Map Summary
 
-## Clocking and Reset
+| Peripheral | Base Address | End Address | Size |
+|------------|--------------|-------------|------|
+| RAM        | `0x0000_0000` | `0x0000_FFFF` | 64 KB |
+| UART       | `0x4000_0000` | `0x4000_0FFF` | 4 KB |
+| Timer      | `0x4001_0000` | `0x4001_0FFF` | 4 KB |
+| GPIO       | `0x4002_0000` | `0x4002_0FFF` | 4 KB |
 
-The design uses a single system clock and an active-low reset. All AXI channels and peripherals operate synchronously to this clock.
+## Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `ADDR_WIDTH` | 32 | Address bus width in bits |
+| `DATA_WIDTH` | 32 | Data bus width in bits |
+| `NUM_SLAVES` | 4 | Number of slave peripherals |
+
+## Navigation
+
+- [Detailed Overview](overview.md) — Component descriptions and design decisions
+- [Memory Map](memory-map.md) — Complete address space specification
+- [Register Map](register-map.md) — Per-register field definitions
+- [FSM Diagrams](fsm-diagrams.md) — Transaction state machines
+- [AXI Protocol](axi-protocol.md) — AXI4-Lite protocol compliance
