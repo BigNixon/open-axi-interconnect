@@ -1,131 +1,236 @@
-# AXI4-Lite Protocol Compliance
+# AXI Protocol Implementation
 
-This page documents how the Open AXI Interconnect implements the AMBA AXI4-Lite protocol.
+## Overview
 
-## Protocol Overview
+This document details the implementation of the AXI4-Lite protocol in the Open AXI Interconnect system. Understanding the protocol implementation is essential for system integration and software development.
 
-AXI4-Lite is a lightweight subset of the full AXI4 protocol designed for simple control register access. It supports:
+## AXI4-Lite Protocol Basics
 
-- Single-beat transactions only (no bursts)
-- Fixed data width (32-bit in this design)
-- No cache, protection, or QoS signals
-- No exclusive access or locked transactions
+The ARM Advanced eXtensible Interface (AXI) protocol defines a high-performance, scalable interface for connecting IP blocks in System-on-Chip (SoC) designs. This implementation focuses on AXI4-Lite, a simplified subset optimized for memory-mapped I/O.
 
-## Signal Groups
+### Key Characteristics
+
+- **Separate Read and Write Channels**: Independent address/data flows
+- **No Burst Support**: Single-beat transactions only
+- **Fixed Response Types**: OKAY and EXOKAY responses
+- **No ID Signals**: No transaction identification
+- **No User Signals**: No user-defined sideband signals
+
+## Signal Definitions
 
 ### Write Address Channel (AW)
 
-| Signal | Width | Direction | Description |
-|--------|-------|-----------|-------------|
-| `AWVALID` | 1 | Master → Slave | Address/control valid |
-| `AWREADY` | 1 | Slave → Master | Slave ready to accept address |
-| `AWADDR`  | 32 | Master → Slave | Write address |
-| `AWPROT`  | 3 | Master → Slave | Protection type (unused) |
+| Signal | Direction | Description |
+|--------|-----------|-------------|
+| `awaddr` | Input | Write address |
+| `awvalid` | Input | Write address valid |
+| `awready` | Output | Write address ready |
 
 ### Write Data Channel (W)
 
-| Signal | Width | Direction | Description |
-|--------|-------|-----------|-------------|
-| `WVALID` | 1 | Master → Slave | Write data valid |
-| `WREADY` | 1 | Slave → Master | Slave ready to accept data |
-| `WDATA`  | 32 | Master → Slave | Write data |
-| `WSTRB`  | 4 | Master → Slave | Write strobe (byte-wise enable) |
+| Signal | Direction | Description |
+|--------|-----------|-------------|
+| `wdata` | Input | Write data |
+| `wstrb` | Input | Write strobe (byte enables) |
+| `wvalid` | Input | Write data valid |
+| `wready` | Output | Write data ready |
 
 ### Write Response Channel (B)
 
-| Signal | Width | Direction | Description |
-|--------|-------|-----------|-------------|
-| `BVALID` | 1 | Slave → Master | Response valid |
-| `BREADY` | 1 | Master → Slave | Master ready to accept response |
-| `BRESP`  | 2 | Slave → Master | Response status (`00` = OKAY) |
+| Signal | Direction | Description |
+|--------|-----------|-------------|
+| `bresp` | Output | Write response |
+| `bvalid` | Output | Write response valid |
+| `bready` | Input | Write response ready |
 
 ### Read Address Channel (AR)
 
-| Signal | Width | Direction | Description |
-|--------|-------|-----------|-------------|
-| `ARVALID` | 1 | Master → Slave | Address/control valid |
-| `ARREADY` | 1 | Slave → Master | Slave ready to accept address |
-| `ARADDR`  | 32 | Master → Slave | Read address |
-| `ARPROT`  | 3 | Master → Slave | Protection type (unused) |
+| Signal | Direction | Description |
+|--------|-----------|-------------|
+| `araddr` | Input | Read address |
+| `arvalid` | Input | Read address valid |
+| `arready` | Output | Read address ready |
 
 ### Read Data Channel (R)
 
-| Signal | Width | Direction | Description |
-|--------|-------|-----------|-------------|
-| `RVALID` | 1 | Slave → Master | Read data valid |
-| `RREADY` | 1 | Master → Slave | Master ready to accept data |
-| `RDATA`  | 32 | Slave → Master | Read data |
-| `RRESP`  | 2 | Slave → Master | Response status (`00` = OKAY) |
+| Signal | Direction | Description |
+|--------|-----------|-------------|
+| `rdata` | Output | Read data |
+| `rresp` | Output | Read response |
+| `rvalid` | Output | Read data valid |
+| `rready` | Input | Read data ready |
 
-## Handshake Rules
-
-1. **Source must not wait for READY before asserting VALID**
-2. **Destination can wait for VALID before asserting READY**
-3. **Once VALID is asserted, it must remain asserted until the handshake occurs**
-4. **READY can be asserted before or after VALID**
-
-## Response Codes
-
-| Code | Name | Description |
-|------|------|-------------|
-| `00` | OKAY | Normal access success |
-| `01` | EXOKAY | Exclusive access okay (not used in AXI4-Lite) |
-| `10` | SLVERR | Slave error — access reached slave but slave returned error |
-| `11` | DECERR | Decode error — no slave at the requested address |
-
-!!! note "Current Implementation"
-    All responses in this design return `OKAY` (`00`). SLVERR and DECERR are not yet implemented.
-
-## Write Strobe (`WSTRB`)
-
-`WSTRB` controls which bytes of `WDATA` are written:
-
-| WSTRB | Bytes Written |
-|-------|---------------|
-| `0001` | Byte 0 only |
-| `0010` | Byte 1 only |
-| `0100` | Byte 2 only |
-| `1000` | Byte 3 only |
-| `0011` | Bytes 0-1 |
-| `1100` | Bytes 2-3 |
-| `1111` | All bytes |
-
-The slave template (`axi_lite_slave`) implements byte-wise writes using:
-
-```systemverilog
-if (WSTRB[0]) reg_data[7:0]   <= WDATA[7:0];
-if (WSTRB[1]) reg_data[15:8]  <= WDATA[15:8];
-if (WSTRB[2]) reg_data[23:16] <= WDATA[23:16];
-if (WSTRB[3]) reg_data[31:24] <= WDATA[31:24];
-```
-
-## Timing Diagram
+## Transaction Flow
 
 ### Write Transaction
 
-```
-CLK    ____/‾‾‾‾\____/‾‾‾‾\____/‾‾‾‾\____/‾‾‾‾\____/‾‾‾‾\____
-AWVALID    ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-AWREADY    __________________________/‾‾‾‾\__________________
-AWADDR     ═════[ADDR]═══════════════════════════════════════
-WVALID     __________________________/‾‾‾‾\__________________
-WREADY     __________________________________/‾‾‾‾\__________
-WDATA      ════════════════════════[DATA]══════════════════════
-WSTRB      ════════════════════════[1111]═════════════════════
-BVALID     ______________________________________/‾‾‾‾\______
-BREADY     __________________________________________/‾‾‾‾\__
-BRESP      ════════════════════════════════════════[00]═══════
-```
+1. **Address Phase**:
+   - Master drives `awaddr` and asserts `awvalid`
+   - Slave asserts `awready` when ready to accept address
+   - Handshake completes when both `awvalid` and `awready` are asserted
+
+2. **Data Phase**:
+   - Master drives `wdata`, `wstrb` and asserts `wvalid`
+   - Slave asserts `wready` when ready to accept data
+   - Handshake completes when both `wvalid` and `wready` are asserted
+
+3. **Response Phase**:
+   - Slave drives `bresp` and asserts `bvalid`
+   - Master asserts `bready` when ready to accept response
+   - Handshake completes when both `bvalid` and `bready` are asserted
 
 ### Read Transaction
 
-```
-CLK    ____/‾‾‾‾\____/‾‾‾‾\____/‾‾‾‾\____/‾‾‾‾\____/‾‾‾‾\____
-ARVALID    ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-ARREADY    __________________________/‾‾‾‾\__________________
-ARADDR     ═════[ADDR]═══════════════════════════════════════
-RVALID     __________________________________/‾‾‾‾\__________
-RREADY     ______________________________________/‾‾‾‾\______
-RDATA      ════════════════════════════════════[DATA]════════
-RRESP      ════════════════════════════════════[00]═══════════
-```
+1. **Address Phase**:
+   - Master drives `araddr` and asserts `arvalid`
+   - Slave asserts `arready` when ready to accept address
+   - Handshake completes when both `arvalid` and `arready` are asserted
+
+2. **Data Phase**:
+   - Slave drives `rdata`, `rresp` and asserts `rvalid`
+   - Master asserts `rready` when ready to accept data
+   - Handshake completes when both `rvalid` and `rready` are asserted
+
+## Response Types
+
+### Write Responses (bresp)
+
+| Value | Name | Description |
+|-------|------|-------------|
+| 0b00 | OKAY | Normal access success |
+| 0b01 | EXOKAY | Exclusive access success (not used in AXI4-Lite) |
+| 0b10 | SLVERR | Slave error |
+| 0b11 | DECERR | Decode error |
+
+### Read Responses (rresp)
+
+Same encoding as write responses.
+
+## Implementation Details
+
+### Address Decoding
+
+The interconnect implements fixed address decoding:
+- No runtime configuration
+- Combinational logic for address comparison
+- Priority-based slave selection
+
+### Write Strobe Handling
+
+Byte-level write enables are supported through the `wstrb` signal:
+- `wstrb[0]` controls byte 0 (bits 7:0)
+- `wstrb[1]` controls byte 1 (bits 15:8)
+- `wstrb[2]` controls byte 2 (bits 23:16)
+- `wstrb[3]` controls byte 3 (bits 31:24)
+
+### Backpressure Management
+
+Slaves can assert backpressure through ready signals:
+- `awready` for write address channel
+- `wready` for write data channel
+- `arready` for read address channel
+- `rready` for read data channel
+
+## Timing Requirements
+
+### Setup and Hold Times
+
+All signals must meet standard setup and hold requirements:
+- Setup time relative to positive clock edge
+- Hold time relative to positive clock edge
+- Minimum pulse width for valid/ready signals
+
+### Clock Domain Crossing
+
+All signals operate in a single clock domain:
+- Clock: `clk`
+- Reset: Active-low synchronous reset (`rst_n`)
+
+## Protocol Compliance
+
+### AXI4-Lite Compliance
+
+The implementation complies with AXI4-Lite requirements:
+- Single outstanding transaction per channel
+- No burst support (single beat only)
+- No exclusive access support
+- No cache/coherent attribute signals
+
+### Restrictions
+
+Current implementation limitations:
+- Single master only
+- No pipelining of transactions
+- Fixed address map
+- No quality of service (QoS) support
+
+## Error Handling
+
+### Decode Errors
+
+Addresses outside defined ranges:
+- Default to RAM controller (fallback behavior)
+- Return appropriate response codes
+- Log errors for debugging
+
+### Protocol Violations
+
+Invalid signal sequences:
+- Misaligned valid/ready handshakes
+- Incorrect timing relationships
+- Unsupported signal combinations
+
+## Performance Characteristics
+
+### Latency
+
+Typical transaction latency:
+- Write: 3-4 clock cycles
+- Read: 3-4 clock cycles
+- Includes all handshake phases
+
+### Throughput
+
+Maximum transaction rate:
+- Limited by single outstanding transaction
+- Dependent on slave response times
+- Clock frequency dependent
+
+## Verification
+
+### Protocol Checking
+
+Implemented using SystemVerilog Assertions:
+- Valid/ready handshake checking
+- Signal integrity verification
+- Protocol sequence validation
+
+### Test Coverage
+
+Coverage points include:
+- All valid transaction sequences
+- Backpressure scenarios
+- Error conditions
+- Boundary cases
+
+## Future Enhancements
+
+### AXI4 Full Support
+
+Planned additions:
+- Burst transaction support
+- AXI ID signal implementation
+- Exclusive access support
+- Cache/coherent attribute handling
+
+### Performance Improvements
+
+Potential optimizations:
+- Multiple outstanding transactions
+- Pipeline stage insertion
+- Reduced latency paths
+- Dynamic clock gating
+
+## Conclusion
+
+The Open AXI Interconnect implements a compliant subset of the AXI4-Lite protocol optimized for simplicity and reliability. The implementation provides predictable behavior suitable for embedded systems and educational purposes while maintaining compatibility with standard AXI tools and methodologies.

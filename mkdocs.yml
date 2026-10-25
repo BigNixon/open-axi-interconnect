@@ -130,3 +130,4 @@ nav:
       - api/index.md
       - api/memory-map-api.md
       - api/register-api.md
+      - api/integration-api.md

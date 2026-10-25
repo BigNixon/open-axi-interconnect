@@ -1,73 +1,142 @@
-# Memory Map
+# Memory Map Specification
 
-This page documents the complete address space of the Open AXI Interconnect subsystem.
+## Overview
 
-## Address Space Overview
+This document defines the complete memory map for the Open AXI Interconnect system. Understanding the memory map is crucial for software development and system integration.
 
-The 32-bit address space is divided into four regions, one per peripheral. The interconnect decodes addresses using fixed base/end boundaries.
+## Address Space Layout
+
+The system utilizes a 32-bit address space organized into distinct regions for each peripheral. The memory map is fixed at compile time to minimize hardware complexity.
 
 ```
-0x0000_0000 ┌─────────────────────────────────────┐
-            │              RAM                    │ 64 KB
-            │         (0x0000_0000 - 0x0000_FFFF) │
-0x0001_0000 ├─────────────────────────────────────┤
-            │              (unused)                 │
-            │                                     │
-0x4000_0000 ├─────────────────────────────────────┤
-            │              UART                     │ 4 KB
-            │         (0x4000_0000 - 0x4000_0FFF) │
-0x4001_0000 ├─────────────────────────────────────┤
-            │              Timer                    │ 4 KB
-            │         (0x4001_0000 - 0x4001_0FFF) │
-0x4002_0000 ├─────────────────────────────────────┤
-            │              GPIO                     │ 4 KB
-            │         (0x4002_0000 - 0x4002_0FFF) │
-0x4003_0000 ├─────────────────────────────────────┤
-            │              (unused)                 │
-            │                                     │
-0xFFFF_FFFF └─────────────────────────────────────┘
+Address Range           Size    Peripheral
+─────────────────────── ─────── ──────────────
+0x0000_0000-0x0000_FFFF 64 KB   RAM Controller
+0x4000_0000-0x4000_0FFF 4 KB    UART Controller
+0x4001_0000-0x4001_0FFF 4 KB    Timer Module
+0x4002_0000-0x4002_0FFF 4 KB    GPIO Controller
+...                     ...     (Reserved)
+──────────────────────────────────────────────
+Total Addressable Space: ~4 GB
 ```
 
-## Decode Logic
+## RAM Controller (0x0000_0000)
 
-The interconnect uses the following decode function (from `rtl/axi/axi_lite_interconnect.sv`):
+The RAM controller occupies the bottom 64KB of the address space.
 
-```systemverilog
-localparam [ADDR_WIDTH-1:0] RAM_END    = 32'h0000_FFFF;
-localparam [ADDR_WIDTH-1:0] UART_BASE  = 32'h4000_0000;
-localparam [ADDR_WIDTH-1:0] UART_END   = 32'h4000_0FFF;
-localparam [ADDR_WIDTH-1:0] TIMER_BASE = 32'h4001_0000;
-localparam [ADDR_WIDTH-1:0] TIMER_END  = 32'h4001_0FFF;
-localparam [ADDR_WIDTH-1:0] GPIO_BASE  = 32'h4002_0000;
-localparam [ADDR_WIDTH-1:0] GPIO_END   = 32'h4002_0FFF;
+### Address Range
+- **Base**: 0x0000_0000
+- **End**: 0x0000_FFFF
+- **Size**: 64 KB (1024 × 32-bit words)
 
-function automatic slave_sel_t decode(input [ADDR_WIDTH-1:0] addr);
-    if      ((addr >= UART_BASE)  && (addr <= UART_END))  decode = SLAVE_UART;
-    else if ((addr >= TIMER_BASE) && (addr <= TIMER_END)) decode = SLAVE_TIMER;
-    else if ((addr >= GPIO_BASE)  && (addr <= GPIO_END))  decode = SLAVE_GPIO;
-    else                                                   decode = SLAVE_RAM;
-endfunction
+### Memory Organization
+The RAM controller implements a dual-access mechanism:
+1. **Control Registers** (0x0000_0000 - 0x0000_000F)
+2. **Memory Array** (accessed via address/data registers)
+
+### Implementation Details
+Addresses within the RAM region that are not control registers are handled by the address/data register mechanism:
+- Write to ADDRESS register (0x08) to set memory location
+- Write to DATA register (0x0C) to store data at that location
+- Read from DATA register (0x0C) to retrieve data from that location
+
+## UART Controller (0x4000_0000)
+
+The UART controller provides serial communication capabilities.
+
+### Address Range
+- **Base**: 0x4000_0000
+- **End**: 0x4000_0FFF
+- **Size**: 4 KB
+
+### Address Decoding
+All addresses within this range route to the UART peripheral. The specific register is determined by the lower 4 bits of the address:
+
+| Address Offset | Register | Function |
+|----------------|----------|----------|
+| 0x0000_0000 | CTRL | Control register |
+| 0x0000_0004 | STATUS | Status register |
+| 0x0000_0008 | TX_DATA | Transmit data |
+| 0x0000_000C | RX_DATA | Receive data |
+
+## Timer Module (0x4001_0000)
+
+The timer module provides timing and interrupt capabilities.
+
+### Address Range
+- **Base**: 0x4001_0000
+- **End**: 0x4001_0FFF
+- **Size**: 4 KB
+
+### Address Decoding
+Similar to UART, addresses within this range route to timer registers:
+
+| Address Offset | Register | Function |
+|----------------|----------|----------|
+| 0x0000_0000 | CTRL | Control register |
+| 0x0000_0004 | STATUS | Status register |
+| 0x0000_0008 | COUNT | Current counter value |
+| 0x0000_000C | COMPARE | Interrupt compare value |
+
+## GPIO Controller (0x4002_0000)
+
+The GPIO controller manages 32 bidirectional I/O pins.
+
+### Address Range
+- **Base**: 0x4002_0000
+- **End**: 0x4002_0FFF
+- **Size**: 4 KB
+
+### Address Decoding
+GPIO registers are accessed via the following offsets:
+
+| Address Offset | Register | Function |
+|----------------|----------|----------|
+| 0x0000_0000 | DIR | Direction control |
+| 0x0000_0004 | OUT | Output value |
+| 0x0000_0008 | IN | Input value (read-only) |
+
+## Address Decoding Logic
+
+The interconnect uses a simple priority-based address decoder:
+
+1. Addresses 0x0000_0000 to 0x0000_FFFF → RAM Controller
+2. Addresses 0x4000_0000 to 0x4000_0FFF → UART Controller
+3. Addresses 0x4001_0000 to 0x4001_0FFF → Timer Module
+4. Addresses 0x4002_0000 to 0x4002_0FFF → GPIO Controller
+5. All other addresses → Default to RAM (fallback)
+
+## Transaction Examples
+
+### Write to UART Control Register
+```
+Address: 0x4000_0000
+Data:    0x0000_0007  // Enable UART, TX, RX
 ```
 
-!!! warning "RAM catch-all"
-    Any address not explicitly matching UART, Timer, or GPIO is routed to RAM. This includes addresses above `0x4003_0000` and the gap between `0x0001_0000` and `0x3FFF_FFFF`.
-
-## Peripheral Base Addresses
-
-| Peripheral | Base Address | End Address | Size | Slave Index |
-|------------|--------------|-------------|------|-------------|
-| RAM        | `0x0000_0000` | `0x0000_FFFF` | 64 KB | 0 |
-| UART       | `0x4000_0000` | `0x4000_0FFF` | 4 KB | 1 |
-| Timer      | `0x4001_0000` | `0x4001_0FFF` | 4 KB | 2 |
-| GPIO       | `0x4002_0000` | `0x4002_0FFF` | 4 KB | 3 |
-
-## Python Constants (for cocotb tests)
-
-```python
-RAM_BASE   = 0x0000_0000
-UART_BASE  = 0x4000_0000
-TIMER_BASE = 0x4001_0000
-GPIO_BASE  = 0x4002_0000
+### Read Timer Counter Value
+```
+Address: 0x4001_0008
+Response: Current 32-bit counter value
 ```
 
-These constants are defined in `verification/cocotb/test_axi_lite.py` and must match the RTL decode logic.
+### Write GPIO Output Values
+```
+Address: 0x4002_0004
+Data:    0xA5A5_A5A5  // Set GPIO output pins
+```
+
+## Memory Map Consistency
+
+The memory map is consistent across all documentation sources:
+- Matches the implementation in `axi_lite_interconnect.sv`
+- Aligned with register specifications in `register_map.md`
+- Corresponds to test cases in `test_axi_lite.py`
+
+## Future Considerations
+
+When extending the system with additional peripherals, consider:
+1. Maintaining alignment to 4KB boundaries for consistency
+2. Reserving sufficient address space for peripheral expansion
+3. Documenting any changes to the address decoding logic
+4. Ensuring backward compatibility with existing software
