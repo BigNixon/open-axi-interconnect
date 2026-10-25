@@ -2,78 +2,114 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/api/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/api/integration-api/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/api/memory-map-api/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/api/register-api/</loc>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/architecture/</loc>
-         <lastmod>2026-09-18</lastmod>
-    </url>
-    <url>
-         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/fsm_diagram/</loc>
-         <lastmod>2026-09-18</lastmod>
-    </url>
-    <url>
-         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/memory_map/</loc>
-         <lastmod>2026-09-18</lastmod>
-    </url>
-    <url>
-         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/register_map/</loc>
-         <lastmod>2026-09-18</lastmod>
-    </url>
-    <url>
-         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/architecture/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/architecture/axi-protocol/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/architecture/fsm-diagrams/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/architecture/memory-map/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/architecture/overview/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/architecture/register-map/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/development/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/development/changelog/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/development/ci-cd/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/development/contributing/</loc>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/getting-started/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/getting-started/installation/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/getting-started/quickstart/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/getting-started/simulation/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/rtl/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/rtl/interconnect/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/rtl/peripherals/</loc>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/rtl/top-level/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
     </url>
     <url>
          <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/verification/</loc>
-         <lastmod>2026-09-18</lastmod>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/verification/assertions/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/verification/cocotb-tests/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/verification/coverage/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://open-axi-interconnect.github.io/open-axi-interconnect/verification/test-plan/</loc>
+         <lastmod>2026-10-25</lastmod>
     </url>
 </urlset>
